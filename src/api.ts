@@ -34,8 +34,8 @@ export async function downloadExtension(extension: SearchResponse["results"][0])
   
   // Create a new folder for the unpacked extension and unzip
   await fs.mkdir(path.join("tmp", extension.guid));
-  await new Promise((resolve) => child_process.exec(`unzip ${path.join("tmp", `${extension.guid}.xpi`)} -d ${path.join("tmp", extension.guid)}`, resolve));
-
+  await new Promise<void>((resolve) => child_process.execFile("unzip", [path.join("tmp", `${extension.guid}.xpi`), "-d", path.join("tmp", extension.guid)], (_, stdout) => resolve()));
+  
   // Return extension guid/directory of unzipped extension
   return path.join("tmp", extension.guid);
 }
